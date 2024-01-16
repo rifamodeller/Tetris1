@@ -20,10 +20,6 @@ ltc = 1
 background = pygame.image.load('tetrs.png')
 
 
-def get_font(size):
-    return pygame.font.Font("font.ttf", size)
-
-
 class Tetris:
     clearedlines = 0
     score = 0
@@ -178,20 +174,25 @@ class Button():
             self.text = self.font.render(self.text_input, True, self.base_color)
 
 
+def get_font(size):
+    return pygame.font.Font('font.ttf', size)
+
+
 def main_menu():
     pygame.display.set_caption('Tetris')
     win = pygame.display.set_mode((400, 500))
+    pygame.font.init()
     while True:
         win.blit(background, (0, 0))
         mouse = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+        MENU_TEXT = get_font(60).render("Tetris", True, white)
+        MENU_RECT = MENU_TEXT.get_rect(center=(200, 120))
 
-        PLAY_BUTTON = Button(image=pygame.image.load("Play Rect.png"), pos=(440, 150),
-                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("Quit Rect.png"), pos=(440, 250),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+        PLAY_BUTTON = Button(image=pygame.image.load("Play Rect.png"), pos=(200, 250),
+                             text_input="PLAY", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+        QUIT_BUTTON = Button(image=pygame.image.load("Quit Rect.png"), pos=(200, 400),
+                             text_input="QUIT", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
 
         win.blit(MENU_TEXT, MENU_RECT)
 
@@ -264,8 +265,8 @@ def main():
                     playing.sideways(1)
 
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit(0)
+                    pygame.mixer.music.stop()
+                    main_menu()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     pressing = False
@@ -300,20 +301,24 @@ def main():
                                              playing.z - 2
                                          ])
 
-        font = pygame.font.SysFont('Comic Sans MS', 11, bold=True)
+        font = pygame.font.SysFont('Comic Sans MS', 18, bold=True)
 
-        win.blit(font.render("Score: " + str(playing.score), True, white), [100, 20])
-        win.blit(font.render("Level: " + str(lvl), True, white), [250, 20])
+        win.blit(font.render("Score: " + str(playing.score), True, white), [5, 80])
+        win.blit(font.render("Level: " + str(lvl), True, white), [10, 105])
         if playing.lvl_check():
             main()
 
         if playing.check == 'gameover':
-            win.blit(font.render("Game Over", True, white), [20, 220])
-            win.blit(font.render("Press ENTER to replay", True, white), [20, 275])
+            pygame.draw.rect(win, black, [playing.sx + playing.z - 20,
+                                          playing.sy + playing.z - 20,
+                                          playing.z + 180,
+                                          playing.z + 380])
+            win.blit(font.render("Game Over", True, white), [150, 100])
+            win.blit(font.render("Press ENTER", True, white), [145, 200])
+            win.blit(font.render("to replay", True, white), [160, 230])
         pygame.display.flip()
         clock.tick(FPS)
 
 
 if __name__ == "__main__":
     main_menu()
-    main()
