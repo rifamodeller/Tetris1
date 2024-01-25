@@ -224,7 +224,7 @@ def main():
     pressing = False
     over = False
     count = 0
-    FPS = 30
+    FPS = 10
 
     pygame.init()
     win = pygame.display.set_mode((sheight, swidth))
@@ -253,6 +253,7 @@ def main():
 
                 if event.key == pygame.K_RETURN:
                     if playing.check == 'gameover':
+                        lvl = 1
                         main()
 
                 if event.key == pygame.K_DOWN:
@@ -266,6 +267,7 @@ def main():
 
                 if event.key == pygame.K_ESCAPE:
                     pygame.mixer.music.stop()
+                    lvl = 1
                     main_menu()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
@@ -322,3 +324,4 @@ def main():
 
 if __name__ == "__main__":
     main_menu()
+
